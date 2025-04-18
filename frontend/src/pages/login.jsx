@@ -16,8 +16,8 @@ function Login({ setUserId }) {
       // Store the JWT token in localStorage
       localStorage.setItem('authToken', res.data.token);
 
-      // For now, simulate setting userId to a fixed value or from response
-      const userIdFromResponse = 1; // Replace with actual user id extraction logic
+      // Set userId from response
+      const userIdFromResponse = res.data.id;
       setUserId(userIdFromResponse);
 
       // Redirect to home or dashboard after successful login

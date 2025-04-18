@@ -30,9 +30,9 @@ function ExpenseForm({ userId, onExpenseAdded }) {
       // Now add expense with categoryId
       const res = await axios.post('http://localhost:4000/api/expenses', {
         user_id: userId,
-        category_id: categoryId,
+        category: categoryName,
         amount: parseFloat(amount),
-        description,
+        title: description,
         expense_date: expenseDate,
       });
       alert(res.data.message);

@@ -14,11 +14,39 @@ function ExpenseHistory({ userId }) {
       });
   };
 
+  const fetchExpenses = () => {
+    axios.get('http://localhost:4000/api/expenses', { params: { user_id: userId } })
+      .then(res => {
+        // Show only last 5 expenses
+        setExpenses(res.data.slice(0, 5));
+      })
+      .catch(err => {
+        console.error('Failed to fetch expenses', err);
+      });
+  };
+
   useEffect(() => {
     if (userId) {
       fetchExpenses();
     }
-  }, [userId]);
+  }, [userId, refresh]);
+
+  useEffect(() => {
+    if (userId) {
+      fetchExpenses();
+    }
+  }, [userId, refresh]);
+  
+  const fetchExpenses = () => {
+    axios.get('http://localhost:4000/api/expenses', { params: { user_id: userId } })
+      .then(res => {
+        // Show only last 5 expenses
+        setExpenses(res.data.slice(0, 5));
+      })
+      .catch(err => {
+        console.error('Failed to fetch expenses', err);
+      });
+  };
 
   return (
     <div>
@@ -37,11 +65,11 @@ function ExpenseHistory({ userId }) {
           </thead>
           <tbody>
             {expenses.map(expense => (
-              <tr key={expense.expense_id}>
+              <tr key={expense.id}>
                 <td>{new Date(expense.expense_date).toLocaleDateString()}</td>
-                <td>{expense.category_name}</td>
-                <td>{expense.description}</td>
-                <td>${expense.amount.toFixed(2)}</td>
+                <td>{expense.category}</td>
+                <td>{expense.title}</td>
+                <td>${Number(expense.amount).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>

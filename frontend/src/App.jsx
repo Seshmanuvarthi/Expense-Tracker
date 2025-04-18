@@ -4,33 +4,54 @@ import Signup from './pages/Signup';
 import ExpenseForm from './components/ExpenseForm';
 import ExpenseHistory from './components/ExpenseHistory';
 import MonthlySummary from './components/MonthlySummary';
-import { useState } from 'react';
+import ErrorBoundary from './components/ErrorBoundary';
+import { useState, useEffect } from 'react';
 
 function App() {
-  const [userId, setUserId] = useState(null);
+  const [id, setId] = useState(() => {
+    // Initialize id from localStorage if available
+    const storedId = localStorage.getItem('id');
+    return storedId ? parseInt(storedId, 10) : null;
+  });
+  const [refreshExpenses, setRefreshExpenses] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (id !== null) {
+      localStorage.setItem('id', id);
+    } else {
+      localStorage.removeItem('id');
+    }
+  }, [id]);
+
   const handleLogout = () => {
-    setUserId(null);
+    setId(null);
     localStorage.removeItem('authToken');
+    localStorage.removeItem('id');
     navigate('/');
+  };
+
+  const handleExpenseAdded = () => {
+    setRefreshExpenses(prev => !prev);
   };
 
   return (
     <Routes>
-      <Route path="/" element={<Login setUserId={setUserId} />} />
+      <Route path="/" element={<Login setUserId={setId} />} />
       <Route path="/signup" element={<Signup />} />
       <Route
         path="/home"
         element={
           <>
             <h1>Expense Tracker Dashboard</h1>
-            {userId ? (
+            {id ? (
               <>
                 <button onClick={handleLogout} style={{ float: 'right' }}>Logout</button>
-                <ExpenseForm userId={userId} onExpenseAdded={() => {}} />
-                <ExpenseHistory userId={userId} />
-                <MonthlySummary userId={userId} />
+                <ErrorBoundary>
+                  <ExpenseForm userId={id} onExpenseAdded={handleExpenseAdded} />
+                  <ExpenseHistory userId={id} refresh={refreshExpenses} />
+                  <MonthlySummary userId={id} />
+                </ErrorBoundary>
               </>
             ) : (
               <>
