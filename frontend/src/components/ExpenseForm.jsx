@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import './ExpenseForm.css';
 
 function ExpenseForm({ userId, onExpenseAdded }) {
   const [categoryName, setCategoryName] = useState('');

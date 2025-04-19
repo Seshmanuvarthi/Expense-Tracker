@@ -1,19 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function ExpenseHistory({ userId }) {
+function ExpenseHistory({ userId, refresh }) {
   const [expenses, setExpenses] = useState([]);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
 
   const fetchExpenses = () => {
-    const params = { user_id: userId };
-    if (startDate) params.start_date = startDate;
-    if (endDate) params.end_date = endDate;
-
-    axios.get('http://localhost:4000/api/expenses', { params })
+    axios.get('http://localhost:4000/api/expenses', { params: { user_id: userId } })
       .then(res => {
-        setExpenses(res.data);
+        // Show only last 5 expenses
+        setExpenses(res.data.slice(0, 5));
       })
       .catch(err => {
         console.error('Failed to fetch expenses', err);
@@ -24,32 +19,11 @@ function ExpenseHistory({ userId }) {
     if (userId) {
       fetchExpenses();
     }
-  }, [userId]);
+  }, [userId, refresh]);
 
   return (
     <div>
-      <h3>Expense History</h3>
-      <div>
-        <label>
-          Start Date:{' '}
-          <input
-            type="date"
-            value={startDate}
-            onChange={e => setStartDate(e.target.value)}
-          />
-        </label>
-        <label style={{ marginLeft: '1rem' }}>
-          End Date:{' '}
-          <input
-            type="date"
-            value={endDate}
-            onChange={e => setEndDate(e.target.value)}
-          />
-        </label>
-        <button onClick={fetchExpenses} style={{ marginLeft: '1rem' }}>
-          Fetch Expenses
-        </button>
-      </div>
+      <h3>Expense History (Last 5)</h3>
       {expenses.length === 0 ? (
         <p>No expenses found.</p>
       ) : (

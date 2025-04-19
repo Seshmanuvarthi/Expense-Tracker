@@ -3,7 +3,7 @@ import Login from './pages/login';
 import Signup from './pages/Signup';
 import ExpenseForm from './components/ExpenseForm';
 import ExpenseHistory from './components/ExpenseHistory';
-// Removed MonthlySummary import as per user request
+import ExpenseDateRange from './components/ExpenseDateRange';
 import ErrorBoundary from './components/ErrorBoundary';
 import { useState, useEffect } from 'react';
 
@@ -50,7 +50,7 @@ function App() {
                 <ErrorBoundary>
                   <ExpenseForm userId={id} onExpenseAdded={handleExpenseAdded} />
                   <ExpenseHistory userId={id} refresh={refreshExpenses} />
-                  {/* Removed MonthlySummary component as per user request */}
+                  <ExpenseDateRange userId={id} />
                 </ErrorBoundary>
               </>
             ) : (
