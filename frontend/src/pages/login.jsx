@@ -6,13 +6,17 @@ import './login.css';
 function Login({ setUserId }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setSuccessMessage('');
+    setErrorMessage('');
     try {
       const res = await axios.post('http://localhost:4000/api/login', { email, password });
-      alert(res.data.message);
+      setSuccessMessage(res.data.message);
 
       // Store the JWT token in localStorage
       localStorage.setItem('authToken', res.data.token);
@@ -25,13 +29,15 @@ function Login({ setUserId }) {
       navigate('/home');
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.error || "Login failed. Please try again.");
+      setErrorMessage(err.response?.data?.error || "Login failed. Please try again.");
     }
   };
 
   return (
     <div>
       <h2>Login</h2>
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <form onSubmit={handleLogin}>
         <input 
           type="email" 

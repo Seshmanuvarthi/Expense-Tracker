@@ -88,3 +88,20 @@ tr:nth-child(even) {
   font-weight: 600;
   margin-bottom: 1rem;
 }
+
+/* Logout button style */
+.logout-btn {
+  float: right;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #a71d2a;
+}

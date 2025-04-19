@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import './ExpenseDateRange.css';
 
 function ExpenseDateRange({ userId }) {
   const [expenses, setExpenses] = useState([]);
@@ -21,26 +22,26 @@ function ExpenseDateRange({ userId }) {
   };
 
   return (
-    <div>
+    <div className="expense-date-range">
       <h3>Expense History (Date Range)</h3>
       <div>
         <label>
-          Start Date:{' '}
+          Start Date:
           <input
             type="date"
             value={startDate}
             onChange={e => setStartDate(e.target.value)}
           />
         </label>
-        <label style={{ marginLeft: '1rem' }}>
-          End Date:{' '}
+        <label>
+          End Date:
           <input
             type="date"
             value={endDate}
             onChange={e => setEndDate(e.target.value)}
           />
         </label>
-        <button onClick={fetchExpenses} style={{ marginLeft: '1rem' }}>
+        <button className="fetch-btn" onClick={fetchExpenses}>
           Fetch Expenses
         </button>
       </div>

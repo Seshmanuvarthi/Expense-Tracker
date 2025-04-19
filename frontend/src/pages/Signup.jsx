@@ -7,30 +7,33 @@ function Signup() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    console.log('🟡 Submitting signup:', { name, email, password });
-
+    setSuccessMessage('');
+    setErrorMessage('');
     try {
       const res = await axios.post('http://localhost:4000/api/signup', {
         name,
         email,
         password,
       });
-      console.log('✅ Response:', res.data);
-      alert(res.data.message);
+      setSuccessMessage(res.data.message);
       navigate('/');
     } catch (err) {
       console.error('❌ Error:', err.response?.data || err.message);
-      alert(err.response?.data?.error || 'Signup failed');
+      setErrorMessage(err.response?.data?.error || 'Signup failed');
     }
   };
 
   return (
     <div>
       <h2>Signup</h2>
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <form onSubmit={handleSignup}>
         <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />

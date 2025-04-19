@@ -6,6 +6,7 @@ import ExpenseHistory from './components/ExpenseHistory';
 import ExpenseDateRange from './components/ExpenseDateRange';
 import ErrorBoundary from './components/ErrorBoundary';
 import { useState, useEffect } from 'react';
+import './index.css';
 
 function App() {
   const [id, setId] = useState(() => {
@@ -46,7 +47,7 @@ function App() {
             <h1>Expense Tracker Dashboard</h1>
             {id ? (
               <>
-                <button onClick={handleLogout} style={{ float: 'right' }}>Logout</button>
+                <button className="logout-btn" onClick={handleLogout}>Logout</button>
                 <ErrorBoundary>
                   <ExpenseForm userId={id} onExpenseAdded={handleExpenseAdded} />
                   <ExpenseHistory userId={id} refresh={refreshExpenses} />
