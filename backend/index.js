@@ -1,4 +1,3 @@
-// index.js
 const express = require('express');
 const cors = require('cors');
 const db = require('./db');
@@ -69,21 +68,36 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-// ✅ Get Expense History for a User
+// ✅ Get Expense History for a User with optional date range filtering
 app.get('/api/expenses', (req, res) => {
   const user_id = req.query.user_id;
+  const start_date = req.query.start_date;
+  const end_date = req.query.end_date;
+
   if (!user_id) {
     return res.status(400).json({ error: 'Missing user_id query parameter' });
   }
 
-  const sql = `
+  let sql = `
     SELECT id, amount, title, expense_date, category
     FROM expenses
     WHERE user_id = ?
-    ORDER BY expense_date DESC
   `;
 
-  db.query(sql, [user_id], (err, results) => {
+  const params = [user_id];
+
+  if (start_date) {
+    sql += ' AND expense_date >= ?';
+    params.push(start_date);
+  }
+  if (end_date) {
+    sql += ' AND expense_date <= ?';
+    params.push(end_date);
+  }
+
+  sql += ' ORDER BY expense_date DESC';
+
+  db.query(sql, params, (err, results) => {
     if (err) {
       console.error('❌ DB Fetch Expenses Error:', err);
       return res.status(500).json({ error: 'Failed to fetch expenses' });

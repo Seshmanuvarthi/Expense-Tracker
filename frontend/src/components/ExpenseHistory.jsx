@@ -3,9 +3,15 @@ import axios from 'axios';
 
 function ExpenseHistory({ userId }) {
   const [expenses, setExpenses] = useState([]);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const fetchExpenses = () => {
-    axios.get('http://localhost:4000/api/expenses', { params: { user_id: userId } })
+    const params = { user_id: userId };
+    if (startDate) params.start_date = startDate;
+    if (endDate) params.end_date = endDate;
+
+    axios.get('http://localhost:4000/api/expenses', { params })
       .then(res => {
         setExpenses(res.data);
       })
@@ -14,43 +20,36 @@ function ExpenseHistory({ userId }) {
       });
   };
 
-  const fetchExpenses = () => {
-    axios.get('http://localhost:4000/api/expenses', { params: { user_id: userId } })
-      .then(res => {
-        // Show only last 5 expenses
-        setExpenses(res.data.slice(0, 5));
-      })
-      .catch(err => {
-        console.error('Failed to fetch expenses', err);
-      });
-  };
-
   useEffect(() => {
     if (userId) {
       fetchExpenses();
     }
-  }, [userId, refresh]);
-
-  useEffect(() => {
-    if (userId) {
-      fetchExpenses();
-    }
-  }, [userId, refresh]);
-  
-  const fetchExpenses = () => {
-    axios.get('http://localhost:4000/api/expenses', { params: { user_id: userId } })
-      .then(res => {
-        // Show only last 5 expenses
-        setExpenses(res.data.slice(0, 5));
-      })
-      .catch(err => {
-        console.error('Failed to fetch expenses', err);
-      });
-  };
+  }, [userId]);
 
   return (
     <div>
       <h3>Expense History</h3>
+      <div>
+        <label>
+          Start Date:{' '}
+          <input
+            type="date"
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+          />
+        </label>
+        <label style={{ marginLeft: '1rem' }}>
+          End Date:{' '}
+          <input
+            type="date"
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
+          />
+        </label>
+        <button onClick={fetchExpenses} style={{ marginLeft: '1rem' }}>
+          Fetch Expenses
+        </button>
+      </div>
       {expenses.length === 0 ? (
         <p>No expenses found.</p>
       ) : (
