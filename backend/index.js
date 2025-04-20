@@ -1,3 +1,9 @@
+/**
+ * Main backend server file for Expense Tracker API.
+ * Sets up Express server, middleware, and API routes for user authentication,
+ * expense management, and category management.
+ */
+
 const express = require('express');
 const cors = require('cors');
 const db = require('./db');
@@ -18,11 +24,13 @@ console.log("🔍 ENV TEST:", {
 });
 
 // ✅ Root Endpoint
+// Root endpoint to check if the API server is running
 app.get('/', (req, res) => {
   res.send('Expense Tracker API is running 🚀');
 });
 
 // ✅ Signup Route
+// Route to handle user signup, hashes password and stores user info in DB
 app.post('/api/signup', async (req, res) => {
   console.log("📩 Signup Request Body:", req.body);
 
@@ -51,6 +59,7 @@ app.post('/api/signup', async (req, res) => {
 });
 
 // ✅ Login Route
+// Route to handle user login, verifies credentials and returns JWT token
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
 
@@ -69,6 +78,7 @@ app.post('/api/login', (req, res) => {
 });
 
 // ✅ Get Expense History for a User with optional date range filtering
+// Route to fetch expenses for a user, supports optional start and end date filters
 app.get('/api/expenses', (req, res) => {
   const user_id = req.query.user_id;
   const start_date = req.query.start_date;
@@ -107,6 +117,7 @@ app.get('/api/expenses', (req, res) => {
 });
 
 // ✅ Get Categories
+// Route to fetch all categories sorted alphabetically
 app.get('/api/categories', (req, res) => {
   const sql = 'SELECT * FROM categories ORDER BY category_name ASC';
   db.query(sql, (err, results) => {
@@ -119,6 +130,7 @@ app.get('/api/categories', (req, res) => {
 });
 
 // ✅ Add Category
+// Route to add a new category to the database
 app.post('/api/categories', (req, res) => {
   const { category_name } = req.body;
   if (!category_name) {
@@ -136,6 +148,7 @@ app.post('/api/categories', (req, res) => {
 });
 
 // POST /api/expenses - Add new expense
+// Route to add a new expense record for a user
 app.post('/api/expenses', (req, res) => {
   const { user_id, title, amount, category, expense_date } = req.body;
 
@@ -154,6 +167,7 @@ app.post('/api/expenses', (req, res) => {
 });
 
 // ✅ Start Server
+// Start the Express server on the specified port
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
