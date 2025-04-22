@@ -1,3 +1,8 @@
+/**
+ * ExpenseForm component allows users to add a new expense.
+ * It manages form state and handles submission to backend API.
+ */
+
 import { useState } from 'react';
 import axios from 'axios';
 import './ExpenseForm.css';
@@ -8,6 +13,11 @@ function ExpenseForm({ userId, onExpenseAdded }) {
   const [description, setDescription] = useState('');
   const [expenseDate, setExpenseDate] = useState('');
 
+  /**
+   * Handles form submission.
+   * Checks if category exists or creates a new one,
+   * then adds the expense with the category.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!categoryName || !amount || !expenseDate) {
@@ -48,52 +58,51 @@ function ExpenseForm({ userId, onExpenseAdded }) {
     }
   };
 
+  // Render the expense form
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>Add New Expense</h3>
-      <label>
-        Category:
-        <input
-          type="text"
-          value={categoryName}
-          onChange={e => setCategoryName(e.target.value)}
-          placeholder="Type category"
-          required
-        />
-      </label>
-      <br />
-      <label>
-        Amount:
-        <input
-          type="number"
-          step="0.01"
-          value={amount}
-          onChange={e => setAmount(e.target.value)}
-          required
-        />
-      </label>
-      <br />
-      <label>
-        Description:
-        <input
-          type="text"
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Date:
-        <input
-          type="date"
-          value={expenseDate}
-          onChange={e => setExpenseDate(e.target.value)}
-          required
-        />
-      </label>
-      <br />
-      <button type="submit">Add Expense</button>
-    </form>
+    <div className="form-wrapper">
+      <form className="container" onSubmit={handleSubmit}>
+        <h3>Add New Expense</h3>
+        <label>
+          Category:
+          <input
+            type="text"
+            value={categoryName}
+            onChange={e => setCategoryName(e.target.value)}
+            placeholder="Type category"
+            required
+          />
+        </label>
+        <label>
+          Amount:
+          <input
+            type="number"
+            step="0.01"
+            value={amount}
+            onChange={e => setAmount(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Description:
+          <input
+            type="text"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+          />
+        </label>
+        <label>
+          Date:
+          <input
+            type="date"
+            value={expenseDate}
+            onChange={e => setExpenseDate(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit">Add Expense</button>
+      </form>
+    </div>
   );
 }
 

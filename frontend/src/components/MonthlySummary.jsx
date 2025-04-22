@@ -1,9 +1,14 @@
+/**
+ * MonthlySummary component fetches and displays a summary of expenses by month.
+ */
+
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function MonthlySummary({ userId }) {
   const [summary, setSummary] = useState([]);
 
+  // Fetch monthly summary data when userId changes
   useEffect(() => {
     if (!userId) return;
     axios.get('http://localhost:4000/api/summary', { params: { user_id: userId } })
@@ -15,6 +20,7 @@ function MonthlySummary({ userId }) {
       });
   }, [userId]);
 
+  // Render the monthly summary table or a message if no data
   return (
     <div>
       <h3>Monthly Expense Summary</h3>

@@ -22,7 +22,7 @@ function ExpenseHistory({ userId, refresh }) {
   }, [userId, refresh]);
 
   return (
-    <div>
+    <div className="container">
       <h3>Expense History (Last 5)</h3>
       {expenses.length === 0 ? (
         <p>No expenses found.</p>
@@ -42,7 +42,7 @@ function ExpenseHistory({ userId, refresh }) {
                 <td>{new Date(expense.expense_date).toLocaleDateString()}</td>
                 <td>{expense.category}</td>
                 <td>{expense.title}</td>
-                <td>${Number(expense.amount).toFixed(2)}</td>
+                <td>₹{Number(expense.amount).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
